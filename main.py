@@ -1,5 +1,5 @@
-
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 import joblib
 import pandas as pd
@@ -7,7 +7,17 @@ import pandas as pd
 # Load model
 model = joblib.load("yield_pipeline.pkl")
 
+# Initialize app
 app = FastAPI(title="Crop Yield Prediction API")
+
+# Enable CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Replace with specific domain in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Input schema
 class PredictInput(BaseModel):
